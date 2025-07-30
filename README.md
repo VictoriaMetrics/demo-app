@@ -14,3 +14,12 @@ TAG=1.0 make docker-push;
 ```
 make kind-load
 ```
+
+## Multi-platform build
+
+```
+docker buildx create --use --name=qemu
+docker buildx inspect --bootstrap  
+
+TAG=1.2 make docker-build-multi-platform;
+```
