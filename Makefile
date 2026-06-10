@@ -15,5 +15,16 @@ docker-build:
 docker-push:
 	$(CONTAINER_TOOL) push $(REGISTRY)/$(ORG)/$(REPO):$(TAG)
 
+.PHONY: docker-push-multiplatform
+docker-push-multiplatform:
+	docker buildx build \
+		--platform=linux/amd64,linux/arm,linux/arm64,linux/ppc64le,linux/386 \
+		--tag $(REGISTRY)/$(ORG)/$(REPO):$(TAG) \
+		-o type=image \
+		--provenance=false \
+		-f Dockerfile \
+		--push \
+		.
+
 load-kind: docker-build
 	kind load docker-image $(REGISTRY)/$(ORG)/$(REPO):$(TAG) --name=$(KIND_CLUSTER_NAME);
